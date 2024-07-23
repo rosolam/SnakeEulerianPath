@@ -1,0 +1,17 @@
+{
+    "name": "eulerian-path-visualizer",
+    "version": "1.0.0",
+    "description": "A Python program to generate and visualize an Eulerian path on a 25x25 grid graph.",
+    "main": "index.js",
+    "scripts": {
+      "start": "python main.py"
+    },
+    "dependencies": {
+      "networkx": "^2.6.3",
+      "matplotlib": "^3.4.3"
+    },
+    "devDependencies": {},
+    "author": "Michael",
+    "license": "ISC"
+  }
+  
