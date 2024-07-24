@@ -1,5 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import random
 
 # Define the grid size
 GRID_SIZE = 24
@@ -35,6 +36,12 @@ for y in range(1, GRID_SIZE - 1, 2):
 for y in range(1, GRID_SIZE - 1, 2):
     G.remove_edge((GRID_SIZE - 1, y), (GRID_SIZE - 1, y + 1))
 
+# Shuffle the order of edges to introduce randomness
+edges = list(G.edges())
+random.shuffle(edges)
+G = nx.Graph()
+G.add_edges_from(edges)
+
 # Plot the graph
 pos = {node: node for node in G.nodes()}  # Position nodes as per their coordinates
 
@@ -64,7 +71,7 @@ if not nx.is_eulerian(G):
     print("The graph is not Eulerian. Please adjust the edges.")
     exit()
 
-# Generate the Eulerian path
+# Generate the Eulerian path using networkx function
 eulerian_path = list(nx.eulerian_circuit(G))
 
 # Plot the Eulerian circuit with path indices on edges
@@ -73,14 +80,13 @@ def draw_path_with_indices(path, pos):
     nx.draw(G, pos, node_size=20, node_color='black', edge_color='gray', with_labels=False)
     
     edge_labels = {}
-    for i in range(len(path) - 1):
-        edge_labels[(path[i], path[i + 1])] = str(i)
-    edge_labels[(path[-1], path[0])] = str(len(path) - 1)
+    for i, (u, v) in enumerate(path):
+        edge_labels[(u, v)] = str(i)
     
+    nx.draw_networkx_edges(G, pos, edgelist=path, edge_color='blue', width=2)
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='red', font_size=7)
     
     plt.show()
 
-# Extract the path and visualize it with indices
-path_nodes = [edge[0] for edge in eulerian_path] + [eulerian_path[-1][1]]
-draw_path_with_indices(path_nodes, pos)
+# Visualize the random Eulerian path with indices
+draw_path_with_indices(eulerian_path, pos)
