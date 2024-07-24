@@ -1,6 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
+import csv
 
 # Define the grid size
 GRID_SIZE = 24
@@ -51,7 +52,7 @@ def draw_graph(graph, pos):
     plt.show()
 
 # Draw the graph
-draw_graph(G, pos)
+#draw_graph(G, pos)
 
 # Debug: Check node degrees
 print("Node degrees:")
@@ -74,8 +75,18 @@ if not nx.is_eulerian(G):
 # Generate the Eulerian path using networkx function
 eulerian_path = list(nx.eulerian_circuit(G))
 
+# Save the Eulerian path to a CSV file
+def save_path_to_csv(path, filename):
+    with open(filename, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        for edge in path:
+            writer.writerow([f"{edge[0][0]},{edge[0][1]}", f"{edge[1][0]},{edge[1][1]}"])
+
+# Save the path to CSV
+save_path_to_csv(eulerian_path, 'path_data.csv')
+
 # Plot the Eulerian circuit with path indices on edges
-def draw_path_with_indices(path, pos):
+def draw_path_with_indices(path, pos, filename):
     plt.figure(figsize=(12, 12))
     nx.draw(G, pos, node_size=20, node_color='black', edge_color='gray', with_labels=False)
     
@@ -86,7 +97,9 @@ def draw_path_with_indices(path, pos):
     nx.draw_networkx_edges(G, pos, edgelist=path, edge_color='blue', width=2)
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='red', font_size=7)
     
+    plt.savefig(filename)
+
     plt.show()
 
 # Visualize the random Eulerian path with indices
-draw_path_with_indices(eulerian_path, pos)
+draw_path_with_indices(eulerian_path, pos, "eulerian_path.png")
